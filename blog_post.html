@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <h1>{{post.title}}</h1>
+  <h2>Written by: {{post.author.username}}</h2>
+  <h3>Published: {{post.date.strftime('%B %d, %Y')}}</h3>
+  <p>{{post.text}}</p>
+
+  {% if post.author == current_user %}
+
+  <div>
+    <a href="{{url_for('blog_posts.update',blog_post_id=post.id)}}">Update</a>
+    <button type="button" class="btn btn-danger" data-toggle='modal' data-target="#del_modal">Delete</button>
+  </div>
+
+  {% endif %}
+</div>
+<!-- The modal will only show if the 'DELETE' button is pressed above. They are linked using the 
+     They are linked '#del_modal' id, this is an arbitory name ie choose id name. When the delete 
+     button is pressed it will toggle the delete button to pop-up       
+-->
+<div class="modal" tabindex="-1" role="dialog" id="del_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       
+        <h5 class="modal-title">Delete Post?</h5>
+       
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      
+    </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete the post?</p>
+      </div>
+      <div class="modal-footer">
+        <!-- ############### CANCEL ####################-->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        
+        <!-- ############### DELETE POST ############### 
+            Create a form group that calls the .delete_post view
+        -->
+        <form action="{{url_for('blog_posts.delete_post',blog_post_id=post.id)}}" method="post">
+          <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
